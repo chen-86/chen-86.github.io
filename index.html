@@ -145,6 +145,97 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-pthread-and-deadlock" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/09/21/pthread-and-deadlock/">pthread_and_deadlock</a>
+    </h1>
+  
+
+        
+        <a href="/2022/09/21/pthread-and-deadlock/" class="archive-article-date">
+  	<time datetime="2022-09-21T13:32:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-09-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="dup-和dup2"><a href="#dup-和dup2" class="headerlink" title="dup()和dup2()"></a>dup()和dup2()</h3><blockquote>
+<p>dup()和dup2()本质都是一样的，都是对文件描述符进行复制，不同的地方在于复制后的文件描述符的产生来源不一样。</p>
+<ul>
+<li>dup()选择当前空闲的最小数值的文件描述符</li>
+<li>dup2()可以制定用户想要的文件描述符</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">dup</span><span class="params">(<span class="type">int</span> oldfd)</span>;</span><br><span class="line">	<span class="comment">/*复制文件描述符*/</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">dup2</span><span class="params">(<span class="type">int</span> oldfd,<span class="type">int</span> newfd)</span>;</span><br><span class="line">	<span class="comment">/*重定向文件描述符*/</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/21/pthread-and-deadlock/01.png"></p>
+<p><strong>重定向输出到指定文件而不是终端</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> re = dup2(oldfd,<span class="number">1</span>);</span><br><span class="line"><span class="comment">//文件描述符01原本是指向当前终端的，dup2()函数将它指向了oldfd，这样的话，原本输出到终端的信息都会输出到oldfd指向的文件</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h3><figure class="highlight cc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//线程创建</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> * <span class="title">callback</span><span class="params">(<span class="type">void</span>* arg)</span></span>&#123;</span><br><span class="line">	...</span><br><span class="line">	...</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="type">pthread_t</span> tid;</span><br><span class="line">	<span class="type">int</span> ret = <span class="built_in">pthread_create</span>(&amp;tid,<span class="literal">NULL</span>,callback,(<span class="type">void</span>*)&amp;arg);</span><br><span class="line">    <span class="comment">//程序执行完这步的时候，内核就已经把子线程加入到了任务队列当中，但是不会立刻执行callback函数，要等主线程的时间片用完之后，才会轮到子线程执行任务</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p><strong>死锁的情况</strong></p>
+<blockquote>
+<p>死锁的情况有两种</p>
+<ul>
+<li>在使用普通锁的情况下，对已经加了锁的互斥量再次加锁</li>
+<li>线程1拥有资源a的情况下等待资源b，同时，线程2拥有资源b的情况下等待资源a</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//a,b是两个共享的公共资源</span></span><br><span class="line"><span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设置两个资源对应的互斥锁</span></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex_a;</span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex_b;</span><br><span class="line"></span><br><span class="line"><span class="comment">//子线程执行函数体</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">another</span><span class="params">(<span class="type">void</span>* arg)</span>&#123;</span><br><span class="line">    pthread_mutex_lock(&amp;mutex_b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;子线程已经获得资源b,正在等待资源a\n&quot;</span>);</span><br><span class="line">    <span class="comment">// sleep(5);</span></span><br><span class="line">    ++b;</span><br><span class="line">    pthread_mutex_lock(&amp;mutex_a);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;子线程已经获得了资源a\n&quot;</span>);</span><br><span class="line">    b+=a++;</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex_a);</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex_b);</span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="comment">//初始化互斥量</span></span><br><span class="line">    pthread_mutex_init(&amp;mutex_a,<span class="literal">NULL</span>);</span><br><span class="line">    pthread_mutex_init(&amp;mutex_b,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//创建子线程</span></span><br><span class="line">    <span class="type">pthread_t</span> id;</span><br><span class="line">    pthread_create(&amp;id,<span class="literal">NULL</span>,another,<span class="literal">NULL</span>);<span class="comment">//从这里开始分成了两拨，主线程和子线程开始竞争资源</span></span><br><span class="line">    <span class="comment">//主线程访问资源a之前需要上锁</span></span><br><span class="line">    pthread_mutex_lock(&amp;mutex_a);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;主线程已经获得了资源a,正在等待资源b\n&quot;</span>);</span><br><span class="line">    sleep(<span class="number">5</span>);<span class="comment">//交换cpu执行权</span></span><br><span class="line">    a++;</span><br><span class="line">    pthread_mutex_lock(&amp;mutex_b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;主线程已经获得了资源b\n&quot;</span>);</span><br><span class="line">    a+=b++;</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex_b);</span><br><span class="line">    pthread_mutex_unlock(&amp;mutex_a);</span><br><span class="line">    <span class="comment">//这个时候主线程已经执行完毕，需要等待子线程执行结束并且对其进行回收</span></span><br><span class="line">    pthread_join(id,<span class="literal">NULL</span>);<span class="comment">//阻塞在这等待子进程结束</span></span><br><span class="line">    <span class="comment">//两个线程都执行结束之后，需要摧毁互斥量资源</span></span><br><span class="line">    pthread_mutex_destroy(&amp;mutex_a);</span><br><span class="line">    pthread_mutex_destroy(&amp;mutex_b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此代码会产生死锁，运行结果如下：</p>
+<p><img src="/2022/09/21/pthread-and-deadlock/02.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/09/21/pthread-and-deadlock/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-http" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
