@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://example.com/2022/09/21/pthread-and-deadlock/01.png">
 <meta property="og:image" content="http://example.com/2022/09/21/pthread-and-deadlock/02.png">
 <meta property="article:published_time" content="2022-09-21T13:32:16.000Z">
-<meta property="article:modified_time" content="2022-09-21T13:42:04.805Z">
+<meta property="article:modified_time" content="2022-09-21T14:08:28.947Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/09/21/pthread-and-deadlock/01.png">
@@ -180,6 +180,8 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">dup</span><span class="params">(<span class="type">int</span> oldfd)</span>;</span><br><span class="line">	<span class="comment">/*复制文件描述符*/</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">dup2</span><span class="params">(<span class="type">int</span> oldfd,<span class="type">int</span> newfd)</span>;</span><br><span class="line">	<span class="comment">/*重定向文件描述符*/</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/2022/09/21/pthread-and-deadlock/01.png"></p>
+<span id="more"></span>
+
 <p><strong>重定向输出到指定文件而不是终端</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> re = dup2(oldfd,<span class="number">1</span>);</span><br><span class="line"><span class="comment">//文件描述符01原本是指向当前终端的，dup2()函数将它指向了oldfd，这样的话，原本输出到终端的信息都会输出到oldfd指向的文件</span></span><br></pre></td></tr></table></figure>
 
