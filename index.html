@@ -145,6 +145,112 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2022-9-25" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/09/25/2022-9-25/">2022-9-25</a>
+    </h1>
+  
+
+        
+        <a href="/2022/09/25/2022-9-25/" class="archive-article-date">
+  	<time datetime="2022-09-25T14:26:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-09-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="GO"><a href="#GO" class="headerlink" title="GO"></a>GO</h3><p><strong>GO语言程序执行流程</strong></p>
+<p><img src="/2022/09/25/2022-9-25/01.png"></p>
+<h3 id="导包"><a href="#导包" class="headerlink" title="导包"></a>导包</h3><blockquote>
+<p>导包有四种方式：直接导、匿名包、别名包、点包</p>
+</blockquote>
+<ul>
+<li>直接导</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="comment">//此时会直接执行lib1和lib2中的init函数</span></span><br><span class="line">	<span class="string">&quot;lib1&quot;</span></span><br><span class="line">    <span class="string">&quot;lib2&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>匿名导</li>
+</ul>
+<blockquote>
+<p>如果到了包进来，但是主程序中没有使用到包里面的函数(init函数不算)，编译器就会报错，这个时候我们又想使用init函数，但是导包进来又会报错，我们就可以使用匿名导包。</p>
+<p>在包前面加<code>_ </code>和空格</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">	_ <span class="string">&quot;lib1&quot;</span></span><br><span class="line">    <span class="string">&quot;lib2&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>别名包</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">	mylib <span class="string">&quot;lib1&quot;</span></span><br><span class="line">    <span class="string">&quot;lib2&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>点包</li>
+</ul>
+<blockquote>
+<p> 在包目前加点，在调用函数的时候就可以直接写函数名，而不需要加上包名</p>
+<p> 但是容易发生命名冲突，不推荐使用</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    .<span class="string">&quot;lib1&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Go</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/09/25/2022-9-25/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-2022-9-24" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -184,15 +290,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">webserver</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">静态函数</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">epoll</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">webserver</a>
         		</li>
       		
 		</ul>
@@ -780,7 +886,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">http parse</a>
+                <a href="javascript:void(0)" class="js-tag color5">webserver</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -792,7 +898,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">webserver</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">http parse</a>
               </li>
             
             <div class="clearfix"></div>
