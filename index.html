@@ -167,38 +167,9 @@
       
         <h3 id="GO"><a href="#GO" class="headerlink" title="GO"></a>GO</h3><p><strong>GO语言程序执行流程</strong></p>
 <p><img src="/2022/09/25/2022-9-25/01.png"></p>
-<h3 id="导包"><a href="#导包" class="headerlink" title="导包"></a>导包</h3><blockquote>
-<p>导包有四种方式：直接导、匿名包、别名包、点包</p>
-</blockquote>
-<ul>
-<li>直接导</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="comment">//此时会直接执行lib1和lib2中的init函数</span></span><br><span class="line">	<span class="string">&quot;lib1&quot;</span></span><br><span class="line">    <span class="string">&quot;lib2&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>匿名导</li>
-</ul>
-<blockquote>
-<p>如果到了包进来，但是主程序中没有使用到包里面的函数(init函数不算)，编译器就会报错，这个时候我们又想使用init函数，但是导包进来又会报错，我们就可以使用匿名导包。</p>
-<p>在包前面加<code>_ </code>和空格</p>
-</blockquote>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">	_ <span class="string">&quot;lib1&quot;</span></span><br><span class="line">    <span class="string">&quot;lib2&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>别名包</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">	mylib <span class="string">&quot;lib1&quot;</span></span><br><span class="line">    <span class="string">&quot;lib2&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>点包</li>
-</ul>
-<blockquote>
-<p> 在包目前加点，在调用函数的时候就可以直接写函数名，而不需要加上包名</p>
-<p> 但是容易发生命名冲突，不推荐使用</p>
-</blockquote>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    .<span class="string">&quot;lib1&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
+        
+          <a class="article-more-a" href="/2022/09/25/2022-9-25/#more">more >></a>
+        
       
 
       
