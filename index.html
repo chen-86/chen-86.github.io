@@ -145,6 +145,94 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2022-10-08" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/08/2022-10-08/">Sat Oct 08 2022 08:00:00 GMT+0800 (中国标准时间)</a>
+    </h1>
+  
+
+        
+        <a href="/2022/10/08/2022-10-08/" class="archive-article-date">
+  	<time datetime="2022-10-08T10:59:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="三行代码引发的血案"><a href="#三行代码引发的血案" class="headerlink" title="三行代码引发的血案"></a>三行代码引发的血案</h2><p>起因，在阅读xv6_book的时候，看到这么一段：</p>
+<blockquote>
+<p>A file’s name is distinct from the file itself; the same underlying file, called an inode, can have multiple names, called links .</p>
+<p>The unlink system call removes a name from the file system. The file’s inode and the disk space holding its content are only freed when the file’s link count is zero and no file descriptors refer to it.  </p>
+</blockquote>
+<p>大致意思就是说一个底层文件可以有多个别名，也可以有多个文件描述符指向它，当某个文件的所有别名都移除以及不再有任何文件描述符指向它之后，这个文件就会被系统从硬盘上删除，之前占据的存储空间也会被释放。书中还附带了一段演示代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;/tmp/xyz&quot;</span>, O_CREATE|O_RDWR);</span><br><span class="line">unlink(<span class="string">&quot;/tmp/xyz&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This is an idiomatic way to create a temporary inode that will be cleaned up when the process closes fd or exits  .</p>
+</blockquote>
+<p>这段代码通常用来创建一个临时的索引节点，也就是一个临时的底层文件，当该进程结束或者关闭文件描述符的时候，这个临时的底层文件就会被系统删除。</p>
+<p>出于好奇，我打算亲手试验一下，于是敲下了如下代码：</p>
+        
+          <a class="article-more-a" href="/2022/10/08/2022-10-08/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">mit6.828</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/10/08/2022-10-08/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-2022-10-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -893,74 +981,6 @@
 
 
   
-    <article id="post-http" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/09/20/http/">http</a>
-    </h1>
-  
-
-        
-        <a href="/2022/09/20/http/" class="archive-article-date">
-  	<time datetime="2022-09-20T12:31:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>http协议是应用层协议,TCP&#x2F;IP是传输层协议</p>
-</blockquote>
-<p><strong>TCP协议是传输层协议</strong>，主要解决数据如何在网络中传输，而HTTP是应用层协议，主要解决如何包装数据。</p>
-<p>TCP&#x2F;IP和HTTP协议的关系，从本质上来说，二者没有可比性，我们在传输数据时，可以只使用（传输层）TCP&#x2F;IP协议，但是那样的话，如果没有应用层，便无法识别数据内容，如果想要使传输的数据有意义，则必须使用到应用层协议，应用层协议有很多，比如HTTP、FTP、TELNET 等，也可以自己定义应用层协议。WEB使用HTTP协议作应用层协议，以封装HTTP 文本信息，然后使用TCP&#x2F;IP做传输层协议将它发到网络上。</p>
-<p><strong>Http协议是建立在TCP协议基础之上的</strong>，当浏览器需要从服务器获取网页数据的时候，会发出一次Http请求。Http会通过TCP建立起一个到服务器的连接通道，当本次请求需要的数据完毕后，Http会立即将TCP连接断开，这个过程是很短的，所以Http连接是一种短连接，是一种无状态的连接。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/09/20/http/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1066,15 +1086,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">mit6.828</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">MIT_6.828</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">MIT.6.828</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1087,6 +1107,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">epoll</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
